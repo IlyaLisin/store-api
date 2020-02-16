@@ -1,3 +1,18 @@
 Rails.application.routes.draw do
-  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
+  scope :v1 do
+    devise_for :users, only: []
+  end
+
+  namespace :v1 do
+    namespace :accounts do
+        post '/session', to: 'sessions#create_session'
+        post '/sign_up', to: 'registrations#create'
+        patch '/email_confirmation', :to => 'registrations#confirm_email'
+        delete '/session', to: 'sessions#destroy'
+        get '/', to: 'users#show'
+    end
+
+    resources :products, only: :index
+    resources :purchase_orders, only: :create
+  end
 end

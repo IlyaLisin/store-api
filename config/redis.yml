@@ -1,0 +1,11 @@
+development: &default
+  host: <%= ENV.fetch("REDIS_HOST") %>
+  port: <%= ENV.fetch("REDIS_PORT") %>
+  db: <%= ENV.fetch("REDIS_DB") { 0 } %>
+staging:
+  <<: *default
+production:
+  <<: *default
+test:
+  <<: *default
+  db: <%= ENV.fetch("REDIS_DB") { 10 } %>

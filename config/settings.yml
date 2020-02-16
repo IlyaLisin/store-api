@@ -1,0 +1,21 @@
+defaults: &defaults
+  server_host: <%= ENV["SERVER_HOST"] %>
+  server_port: <%= ENV["SERVER_PORT"] %>
+  server_protocol: <%= ENV["SERVER_PROTOCOL"] || 'http' %>
+
+development:
+  <<: *defaults
+  server_host: <%= ENV["SERVER_HOST"] || 'localhost' %>
+  server_port: <%= ENV["SERVER_PORT"] || '80' %>
+
+staging:
+  <<: *defaults
+
+production:
+  <<: *defaults
+
+test:
+  <<: *defaults
+  server_host: example.com
+  server_port: 80
+  server_protocol: http
