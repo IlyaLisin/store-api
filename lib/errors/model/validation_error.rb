@@ -1,9 +1,6 @@
 # frozen_string_literal: true
 
 module Model
-  # Класс для вызова ошибки валидации
-  # @param errors [ActiveModel::Errors] ошибка валидации
-  # @param http [Integer] http-код ошибки
   class ValidationError < MultiError
     def initialize(errors, http = 422)
       super(hsh_error(errors.to_hash(:full_messages), nil), http)

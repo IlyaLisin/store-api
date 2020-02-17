@@ -1,24 +1,32 @@
-# README
+# Store-API
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Start
 
-Things you may want to cover:
+1. `docker-compose up`
+1. Create ENV files: `.env.development` and/or `.env.test`
+1. Documentation `docs/swagger.yaml`.
 
-* Ruby version
+## ENV
 
-* System dependencies
+* RAILS_ENV
 
-* Configuration
+`/config/database.yml`
 
-* Database creation
+* DATABASE_NAME
+* DATABASE_HOST
+* DATABASE_PORT
+* DATABASE_USERNAME
+* DATABASE_PASSWORD
+* DATABASE_URL
 
-* Database initialization
+`/config/redis.yml`
 
-* How to run the test suite
+* REDIS_HOST
+* REDIS_PORT
+* REDIS_DB
 
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+* SESSION_REDIS_HOST
+* SESSION_REDIS_PORT
+* SESSION_PREFIX
+* SESSION_REDIS_DB
+* SESSION_REDIS_EXPIRE

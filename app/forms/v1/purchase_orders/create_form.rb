@@ -6,7 +6,7 @@ module V1
       TYPE = 'purchase_order'
 
       RELATIONSHIPS = {
-          'purchase_orders_products' => OrdersProductForm,
+        'purchase_orders_products' => OrdersProductForm
       }.freeze
 
       attr_accessor(*RELATIONSHIPS.keys)

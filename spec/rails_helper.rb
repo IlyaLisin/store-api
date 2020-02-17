@@ -10,6 +10,7 @@ require 'rspec/rails'
 # Add additional requires below this line. Rails is not loaded until this point!
 require 'rspec/json_expectations'
 require 'json_matchers/rspec'
+Dir[Rails.root.join('spec', 'support', '**', '*.rb')].each(&method(:require))
 
 # Checks for pending migrations and applies them before tests are run.
 # If you are not using ActiveRecord, you can remove these lines.

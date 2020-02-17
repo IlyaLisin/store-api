@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-# Методы для работы с аттрибутами
 module Attributable
   extend ActiveSupport::Concern
 

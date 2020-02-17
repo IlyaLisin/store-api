@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-# Методы для работы со связями
 module Relationshipable
   extend ActiveSupport::Concern
 

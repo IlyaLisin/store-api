@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ApplicationController < ActionController::API
   include Pundit
 
@@ -27,8 +29,8 @@ class ApplicationController < ActionController::API
 
   def render_errors(exception)
     render(
-        json: { errors: [exception.jsonapi_hash].flatten },
-        status: exception.http
+      json: { errors: [exception.jsonapi_hash].flatten },
+      status: exception.http
     )
   end
 

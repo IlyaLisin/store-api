@@ -11,9 +11,5 @@ Rails.application.config.session_store(
     key_prefix: Rails.application.config.redis_session['prefix'],
     host: Rails.application.config.redis_session['host'],
     port: Rails.application.config.redis_session['port']
-  },
-  domain: {
-      production: '.bubble.ru',
-      staging: '.bubble.ru'
-  }.fetch(Rails.env.to_sym, :all)
+  }
 )

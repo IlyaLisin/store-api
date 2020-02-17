@@ -7,7 +7,14 @@ services:
     volumes:
       - .:/var/www/store-api
     environment:
+      - RAILS_ENV=development
       - DATABASE_URL=postgresql://store_dev:store_dev@postgres:5432/store_dev
+      - SESSION_REDIS_HOST=redis
+      - SESSION_REDIS_PORT=6379
+      - SESSION_PREFIX='session:'
+      - SESSION_REDIS_EXPIRE=86660
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
     ports:
       - 3000:3000
     depends_on:

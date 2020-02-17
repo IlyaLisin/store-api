@@ -4,7 +4,7 @@ module V1
   module Accounts
     class SessionsControllerPolicy < ApplicationPolicy
       def create_session?
-        true
+        !user.present?
       end
 
       def destroy?

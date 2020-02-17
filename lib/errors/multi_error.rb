@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-# Базовый класс мульти-ошибки
-# @param errors [Array<BaseError>] массив ошибок BaseError
-# @param http [Integer] http-код
 class MultiError < StandardError
   attr_reader :errors, :http
 

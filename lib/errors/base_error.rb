@@ -1,9 +1,5 @@
 # frozen_string_literal: true
 
-# Базовый класс ошибки
-# @param msg [String] сообщение, которое будет отдаваться
-# @param http [Integer] http-код ошибки
-# @param pointer [Hash] source[:pointer] ошибки
 class BaseError < StandardError
   attr_reader :http, :pointer, :meta
 

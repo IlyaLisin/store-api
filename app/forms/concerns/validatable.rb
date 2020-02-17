@@ -1,10 +1,9 @@
 # frozen_string_literal: true
 
-# Методы валидации
 module Validatable
   extend ActiveSupport::Concern
 
-  WRONG_TYPE = 'validation.errors.forms.wrong_type'
+  WRONG_TYPE = 'wrong type'
   RELATIONSHIPS = 'relationships'
 
   included do
@@ -30,17 +29,17 @@ module Validatable
   end
 
   def validate_data(params, pointer, classes)
-    return errors.add(pointer, I18n.t('validation.errors.forms.required')) unless params
+    return errors.add(pointer, 'required') unless params
 
     return if classes.map { |k| params&.is_a?(k) }.include?(true)
 
-    errors.add(pointer, I18n.t(WRONG_TYPE))
+    errors.add(pointer, WRONG_TYPE)
   end
 
   def validate_relationships(params)
     return if params.dig('data')&.key?(RELATIONSHIPS).blank?
 
-    return errors.add(:relationships, I18n.t(WRONG_TYPE)) unless
+    return errors.add(:relationships, WRONG_TYPE) unless
         params.dig('data', RELATIONSHIPS)&.is_a?(Hash)
 
     validate_relationships_struct(params.dig('data', RELATIONSHIPS))
@@ -51,13 +50,13 @@ module Validatable
       if v.is_a?(Hash)
         validate_data(v, :"#{RELATIONSHIPS}.#{k}.data", [Hash])
       else
-        errors.add(:"#{RELATIONSHIPS}.#{k}", I18n.t(WRONG_TYPE))
+        errors.add(:"#{RELATIONSHIPS}.#{k}", WRONG_TYPE)
       end
     end
   end
 
   def check_type
-    errors.add :type, I18n.t('validation.errors.forms.type.invalid', valid_type: self.class::TYPE) if
+    errors.add :type, 'invalid type' if
         @type != self.class::TYPE
   end
 

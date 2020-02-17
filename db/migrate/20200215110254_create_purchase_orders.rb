@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreatePurchaseOrders < ActiveRecord::Migration[6.0]
   def change
     create_table :purchase_orders, id: :uuid, comment: 'Заказы' do |t|

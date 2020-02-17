@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module V1
   module Accounts
     class ConfirmEmail
@@ -15,4 +17,3 @@ module V1
     end
   end
 end
-

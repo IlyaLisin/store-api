@@ -1,0 +1,553 @@
+openapi: "3.0.0"
+
+info:
+  version: 0.0.1
+  title: Store-API
+
+security:
+  - localCookieAuth: []
+
+tags:
+  - name: accounts
+  - name: products
+  - name: orders
+
+paths:
+  /accounts/sign_up:
+    post:
+      tags:
+        - accounts
+      summary:
+        Register user
+      requestBody:
+        $ref: '#/components/requestBodies/RegisterUser'
+      responses:
+        204:
+          description: account created
+        400:
+          $ref: '#/components/responses/400BadRequest'
+        401:
+          $ref: '#/components/responses/401Unauthorized'
+        403:
+          $ref: '#/components/responses/403Forbidden'
+        422:
+          $ref: '#/components/responses/422UnprocessableEntity'
+        500:
+          $ref: '#/components/responses/500InternalServerError'
+
+  /accounts/email_confirmation:
+    patch:
+      tags:
+        - accounts
+      summary:
+        Email confirmation
+      parameters:
+        - name: confirmation_token
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        204:
+          description: account confirmed
+        400:
+          $ref: '#/components/responses/400BadRequest'
+        401:
+          $ref: '#/components/responses/401Unauthorized'
+        403:
+          $ref: '#/components/responses/403Forbidden'
+        422:
+          $ref: '#/components/responses/422UnprocessableEntity'
+        500:
+          $ref: '#/components/responses/500InternalServerError'
+
+  /accounts/session:
+    post:
+      tags:
+        - accounts
+      summary:
+        Create user session
+      requestBody:
+        $ref: '#/components/requestBodies/UserSessionRequest'
+      responses:
+        200:
+          $ref: '#/components/responses/200User'
+        400:
+          $ref: '#/components/responses/400BadRequest'
+        401:
+          $ref: '#/components/responses/401Unauthorized'
+        403:
+          $ref: '#/components/responses/403Forbidden'
+        422:
+          $ref: '#/components/responses/422UnprocessableEntity'
+        500:
+          $ref: '#/components/responses/500InternalServerError'
+    delete:
+      tags:
+        - accounts
+      summary:
+        Delete user session
+      responses:
+        204:
+          description: User logouted
+        401:
+          $ref: '#/components/responses/401Unauthorized'
+        500:
+          $ref: '#/components/responses/500InternalServerError'
+
+  /user:
+    get:
+      tags:
+        - accounts
+      summary:
+        Get current user
+      responses:
+        200:
+          $ref: '#/components/responses/200User'
+        401:
+          $ref: '#/components/responses/401Unauthorized'
+        500:
+          $ref: '#/components/responses/500InternalServerError'
+
+  /products:
+    get:
+      summary: Get products list
+      tags:
+        - products
+      parameters:
+        - $ref: '#/components/parameters/PageNumber'
+        - $ref: '#/components/parameters/PageSize'
+      responses:
+        200:
+          $ref: '#/components/responses/200Products'
+        400:
+          $ref: '#/components/responses/400BadRequest'
+
+  /purchase_orders:
+    post:
+      tags:
+        - orders
+      summary: Create new order
+      parameters:
+        - $ref: '#/components/parameters/PurchaseOrdersIncludes'
+      requestBody:
+        $ref: '#/components/requestBodies/CreatePurchaseOrderRequest'
+      responses:
+        200:
+          $ref: '#/components/responses/200PurchaseOrder'
+        400:
+          $ref: '#/components/responses/400BadRequest'
+        404:
+          $ref: '#/components/responses/404NotFound'
+        422:
+          $ref: '#/components/responses/422UnprocessableEntity'
+        500:
+          $ref: '#/components/responses/500InternalServerError'
+
+components:
+  securitySchemes:
+    localCookieAuth:
+      type: apiKey
+      in: cookie
+      name: _store_development_session
+
+  requestBodies:
+    RegisterUser:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  type:
+                    type: string
+                    enum:
+                      - user
+                  attributes:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                      password:
+                        type: string
+                      email:
+                        type: string
+
+    UserSessionRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  type:
+                    type: string
+                    enum:
+                      - session
+                  attributes:
+                    type: object
+                    properties:
+                      email:
+                        type: string
+                      password:
+                        type: string
+
+    CreatePurchaseOrderRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: object
+                properties:
+                  type:
+                    type: string
+                    enum:
+                      - purchase_order
+                  relationships:
+                    type: object
+                    properties:
+                      purchase_orders_products:
+                        $ref: '#/components/schemas/CreatePurchaseOrdersProductRelationship'
+
+  schemas:
+    ErrorsList:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              detail:
+                type: string
+              source:
+                type: object
+                properties:
+                  pointer:
+                    type: string
+              title:
+                type: string
+              code:
+                type: string
+                example: '401'
+                enum:
+                  - "400"
+                  - "401"
+                  - "403"
+                  - "404"
+                  - "422"
+                  - "500"
+
+    User:
+      type: object
+      required:
+        - id
+        - type
+        - attributes
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum:
+            - user
+        attributes:
+          type: object
+          properties:
+            name:
+              type: string
+            email:
+              type: string
+            phone:
+              type: string
+
+    Product:
+      type: object
+      required:
+        - id
+        - type
+        - attributes
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum:
+            - product
+        attributes:
+          type: object
+          properties:
+            name:
+              type: string
+            available_count:
+              type: integer
+            price:
+              type: integer
+
+    PurchaseOrder:
+      type: object
+      required:
+        - id
+        - type
+        - attributes
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum:
+            - purchase_order
+        relationships:
+          type: object
+          properties:
+            purchase_orders_products:
+              $ref: '#/components/schemas/PurchaseOrdersProductsRelationship'
+
+    PurchaseOrdersProduct:
+      type: object
+      required:
+        - id
+        - type
+        - attributes
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum:
+            - purchase_orders_product
+        attributes:
+          type: object
+          properties:
+            amount:
+              type: integer
+        relationships:
+          type: object
+          properties:
+            product:
+              $ref: '#/components/schemas/ProductRelationship'
+
+    ProductRelationship:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: object
+          required:
+            - id
+            - type
+          properties:
+            type:
+              type: string
+              enum:
+                - product
+            id:
+              type: string
+              format: uuid
+
+    CreatePurchaseOrdersProductRelationship:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+            required:
+              - id
+              - attributes
+            properties:
+              type:
+                type: string
+                enum:
+                  - purchase_orders_product
+              attributes:
+                type: object
+                required:
+                  - product_id
+                  - count
+                properties:
+                  product_id:
+                    type: string
+                    format: uuid
+                  count:
+                    type: number
+                    format: integer
+                    example: 1
+
+    PurchaseOrdersProductsRelationship:
+      type: object
+      required:
+        - data
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+            required:
+              - id
+              - type
+            properties:
+              type:
+                type: string
+                enum:
+                  - purchase_orders_product
+              id:
+                type: string
+                format: uuid
+
+    CountMeta:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 100
+
+  responses:
+    400BadRequest:
+      description: Invalid parametrs format
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorsList'
+    401Unauthorized:
+      description: Unaurhorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorsList'
+    403Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorsList'
+    404NotFound:
+      description: Record not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorsList'
+    422UnprocessableEntity:
+      description: Validation error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorsList'
+
+    500InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorsList'
+
+    200User:
+      description: User
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                $ref: '#/components/schemas/User'
+              included:
+                type: array
+                items:
+                  oneOf:
+                    - $ref: '#/components/schemas/PurchaseOrder'
+    200Products:
+      description: Products list
+      content:
+        application/vnd.api+json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  oneOf:
+                    - $ref: '#/components/schemas/Product'
+              meta:
+                $ref: '#/components/schemas/CountMeta'
+    200Product:
+      description: Product
+      content:
+        application/vnd.api+json:
+          schema:
+            type: object
+            properties:
+              data:
+                $ref: '#/components/schemas/Product'
+    200PurchaseOrder:
+      description: Order
+      content:
+        application/vnd.api+json:
+          schema:
+            type: object
+            properties:
+              data:
+                $ref: '#/components/schemas/PurchaseOrder'
+              included:
+                type: array
+                items:
+                  oneOf:
+                    - $ref: '#/components/schemas/PurchaseOrdersProduct'
+    200PurchaseOrdersList:
+      description: Orders list
+      content:
+        application/vnd.api+json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items:
+                  oneOf:
+                    - $ref: '#/components/schemas/PurchaseOrder'
+              included:
+                type: array
+                items:
+                  oneOf:
+                    - $ref: '#/components/schemas/PurchaseOrdersProduct'
+
+  parameters:
+    PageNumber:
+      name: page[number]
+      in: query
+      description: Page number
+      schema:
+        type: integer
+        default: 0
+        minimum: 0
+    PageSize:
+      name: page[size]
+      in: query
+      description: Page size (from 1 to 50).
+      schema:
+        type: integer
+        default: 10
+        maximum: 50
+        minimum: 1
+    PurchaseOrdersIncludes:
+      name: include
+      in: query
+      required: false
+      explode: false
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+            - purchase_orders_products

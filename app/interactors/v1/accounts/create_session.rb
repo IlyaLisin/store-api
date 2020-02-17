@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module V1
   module Accounts
     class CreateSession
@@ -8,10 +10,9 @@ module V1
       def call
         context.user = User.find_by_email(form.email)&.authenticate(form.password)
 
-        raise AuthorizedError.new('Incorrect email or password') unless context.user
-        raise AuthorizedError.new('Email is not confirmed') unless context.user.confirmed?
+        raise AuthorizedError, 'Incorrect email or password' unless context.user
+        raise AuthorizedError, 'Email is not confirmed' unless context.user.confirmed?
       end
     end
   end
 end
-

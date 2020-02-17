@@ -4,11 +4,11 @@ module V1
   module Accounts
     class RegistrationsControllerPolicy < ApplicationPolicy
       def create?
-        true
+        !user.present?
       end
 
       def confirm_email?
-        true
+        !user.present?
       end
     end
   end

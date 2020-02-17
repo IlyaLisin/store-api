@@ -24,9 +24,9 @@ module V1
           product = find_product!(product_form.product_id)
 
           attributes << {
-              product_id: product.id,
-              purchase_order_id: context.order.id,
-              amount: product_form.amount
+            product_id: product.id,
+            purchase_order_id: context.order.id,
+            amount: product_form.amount
           }
         end
 

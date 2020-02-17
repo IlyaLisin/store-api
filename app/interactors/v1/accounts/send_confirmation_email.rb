@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module V1
   module Accounts
     class SendConfirmationEmail
@@ -7,9 +9,9 @@ module V1
 
       def call
         UserMailer.registration_confirmation(user).deliver_later
-      rescue => ex
-        Rails.logger.error "Error in Users::SendConfirmationEmail interactor: #{ex.message}"
-        Rails.logger.error ex.backtrace
+      rescue => e
+        Rails.logger.error "Error in Users::SendConfirmationEmail interactor: #{e.message}"
+        Rails.logger.error e.backtrace
         context.fail!(errors: 'Error while sending email')
       end
     end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ApplicationMailer < ActionMailer::Base
   include ApplicationHelpers
   add_template_helper ApplicationHelpers

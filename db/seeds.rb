@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'faker'
 
 def users
@@ -5,10 +7,10 @@ def users
 
   10.times do
     users << {
-        name: Faker::Movies::Hobbit.character,
-        email: Faker::Internet.email,
-        password: '12345',
-        confirmed_at: Time.current
+      name: Faker::Movies::Hobbit.character,
+      email: Faker::Internet.email,
+      password: '12345',
+      confirmed_at: Time.current
     }
   end
 
@@ -20,9 +22,9 @@ def products
 
   20.times do
     products << {
-        name: Faker::Book.title,
-        available_count: rand(1..10),
-        price: rand(10..100)
+      name: Faker::Book.title,
+      available_count: rand(1..10),
+      price: rand(10..100)
     }
   end
 
@@ -42,9 +44,9 @@ def purchase_orders
     products = Product.all.sample(2)
     products.each do |p|
       PurchaseOrdersProduct.create!(
-          purchase_order: o,
-          product: p,
-          amount: products.sum(&:price)
+        purchase_order: o,
+        product: p,
+        amount: products.sum(&:price)
       )
     end
   end

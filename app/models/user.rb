@@ -1,5 +1,23 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: users
+#
+#  id                     :uuid             not null, primary key
+#  name                   :string
+#  phone                  :string
+#  email                  :string           not null
+#  password_digest        :string           not null
+#  reset_password_token   :string
+#  reset_password_sent_at :datetime
+#  confirmation_token     :string
+#  confirmation_sent_at   :datetime
+#  confirmed_at           :datetime
+#  created_at             :datetime         not null
+#  updated_at             :datetime         not null
+#
+
 class User < ApplicationRecord
   has_secure_password
 
@@ -13,7 +31,7 @@ class User < ApplicationRecord
   validates_uniqueness_of :confirmation_token, allow_nil: true
 
   def confirmed?
-    self.confirmed_at.present?
+    confirmed_at.present?
   end
 
   def confirm_email
