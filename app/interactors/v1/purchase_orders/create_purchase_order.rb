@@ -5,7 +5,12 @@ module V1
     class CreatePurchaseOrder
       include Interactor
 
-      delegate :form, to: :context
+      delegate :params, :form, to: :context
+
+      before do
+        context.form = CreateForm.new(params)
+        form.validate!
+      end
 
       def call
         ActiveRecord::Base.transaction do
@@ -13,6 +18,8 @@ module V1
 
           PurchaseOrdersProduct.create!(purchase_orders_products)
         end
+
+        context.order.reload
       end
 
       private

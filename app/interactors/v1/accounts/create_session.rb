@@ -5,7 +5,12 @@ module V1
     class CreateSession
       include Interactor
 
-      delegate :form, to: :context
+      delegate :params, :form, to: :context
+
+      before do
+        context.form = CreateSessionForm.new(params)
+        form.validate!
+      end
 
       def call
         context.user = User.find_by_email(form.email)&.authenticate(form.password)

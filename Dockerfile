@@ -1,19 +1,16 @@
-FROM ruby:2.6.5
+FROM ruby:3.2.2
 
-ENV WD /var/www/store-api
-ENV HOME /root
-WORKDIR ${WD}
+ENV WD=/app/
+WORKDIR $WD
 
 RUN apt update && \
     gem install bundler && \
-    rm -rf /var/lib/apt/lists/*
+    apt-get install -y postgresql-client && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-COPY Gemfile $WD
-COPY Gemfile.lock $WD
+ADD . $WD
 
-RUN bundle install --without development test --jobs 4
-
-COPY . $WD
+RUN bundle install --retry=3 --jobs 4
 
 EXPOSE 3000
-CMD puma

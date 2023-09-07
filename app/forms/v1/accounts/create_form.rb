@@ -2,7 +2,7 @@
 
 module V1
   module Accounts
-    class CreateForm < BaseForm
+    class CreateForm < JSONAPIForm::Base
       TYPE = 'user'
 
       ATTRIBUTES = %w[
@@ -12,16 +12,13 @@ module V1
         password
       ].freeze
 
-      attr_accessor(*ATTRIBUTES)
-
       validates_presence_of :name, :email, :password
       validate :validate_phone, unless: -> { phone.blank? }
 
       private
 
       def validate_phone
-        errors.add(:phone, 'phone number is invalid') unless
-            Phonelib.parse(phone).valid?
+        errors.add(:phone, 'phone number is invalid') unless Phonelib.parse(phone).valid?
       end
     end
   end

@@ -10,7 +10,7 @@ require 'rspec/rails'
 # Add additional requires below this line. Rails is not loaded until this point!
 require 'rspec/json_expectations'
 require 'json_matchers/rspec'
-Dir[Rails.root.join('spec', 'support', '**', '*.rb')].each(&method(:require))
+Dir[Rails.root.join('spec', 'support', '**', '*.rb')].sort.each(&method(:require))
 
 # Checks for pending migrations and applies them before tests are run.
 # If you are not using ActiveRecord, you can remove these lines.
@@ -37,8 +37,8 @@ RSpec.configure do |config|
   end
 
   config.before do
-    Redis.current.flushdb
-    Redis.session.flushdb
+    Redis.current.flushall
+    Redis.session.flushall
   end
 
   # If you're not using ActiveRecord, or you'd prefer not to run each of your

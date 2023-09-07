@@ -10,6 +10,20 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
+-- Name: pg_trgm; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS pg_trgm WITH SCHEMA public;
+
+
+--
+-- Name: EXTENSION pg_trgm; Type: COMMENT; Schema: -; Owner: -
+--
+
+COMMENT ON EXTENSION pg_trgm IS 'text similarity measurement and index searching based on trigrams';
+
+
+--
 -- Name: pgcrypto; Type: EXTENSION; Schema: -; Owner: -
 --
 
@@ -39,7 +53,7 @@ COMMENT ON EXTENSION "uuid-ossp" IS 'generate universally unique identifiers (UU
 
 SET default_tablespace = '';
 
-SET default_with_oids = false;
+SET default_table_access_method = heap;
 
 --
 -- Name: ar_internal_metadata; Type: TABLE; Schema: public; Owner: -
@@ -58,7 +72,7 @@ CREATE TABLE public.ar_internal_metadata (
 --
 
 CREATE TABLE public.products (
-    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
     name character varying NOT NULL,
     available_count integer DEFAULT 0 NOT NULL,
     price integer DEFAULT 0 NOT NULL,
@@ -100,7 +114,7 @@ COMMENT ON COLUMN public.products.price IS 'Цена товара';
 --
 
 CREATE TABLE public.purchase_orders (
-    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
     user_id uuid NOT NULL,
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL
@@ -126,7 +140,7 @@ COMMENT ON COLUMN public.purchase_orders.user_id IS 'Ссылка на юзер�
 --
 
 CREATE TABLE public.purchase_orders_products (
-    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
     amount integer DEFAULT 1 NOT NULL,
     purchase_order_id uuid NOT NULL,
     product_id uuid NOT NULL,
@@ -177,7 +191,7 @@ CREATE TABLE public.schema_migrations (
 --
 
 CREATE TABLE public.users (
-    id uuid DEFAULT public.gen_random_uuid() NOT NULL,
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
     name character varying,
     phone character varying,
     email character varying NOT NULL,
@@ -304,6 +318,13 @@ CREATE UNIQUE INDEX index_users_on_reset_password_token ON public.users USING bt
 
 
 --
+-- Name: trgm_idx_on_products_name; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX trgm_idx_on_products_name ON public.products USING gin (name public.gin_trgm_ops);
+
+
+--
 -- Name: purchase_orders_products fk_rails_2fd142014a; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -338,6 +359,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200215104645'),
 ('20200215105029'),
 ('20200215110254'),
-('20200215110736');
+('20200215110736'),
+('20230907112359');
 
 

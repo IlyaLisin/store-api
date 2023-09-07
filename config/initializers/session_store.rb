@@ -5,6 +5,7 @@ Rails.application.config.session_store(
   key: "_store_#{Rails.env}_session",
   serializer: :json,
   httponly: true,
+  secure: Rails.env.production? || Rails.env.staging?,
   redis: {
     db: Rails.application.config.redis_session['db'],
     expire_after: Rails.application.config.redis_session['expire_after'].to_i,

@@ -9,6 +9,9 @@ AllCops:
 
   TargetRubyVersion: 2.6
 
+Metrics/AbcSize:
+  Max: 30
+
 Metrics/LineLength:
   Max: 120
   IgnoredPatterns: ['\A#']
@@ -17,6 +20,7 @@ Metrics/MethodLength:
   Max: 15
   Exclude:
     - 'db/seeds.rb'
+    - 'app/queries/concerns/paginable.rb'
 
 Style/AsciiComments:
   Enabled: false

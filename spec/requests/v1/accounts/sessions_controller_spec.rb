@@ -61,7 +61,7 @@ RSpec.describe V1::Accounts::SessionsController, type: :request do
       it 'sets cookies' do
         default_request
 
-        expect(Redis.session.exists("session:test:#{response.cookies['_store_test_session']}")).to be(true)
+        expect(Redis.session.exists("session:test:#{response.cookies['_store_test_session']}")).to eq(1)
       end
     end
 

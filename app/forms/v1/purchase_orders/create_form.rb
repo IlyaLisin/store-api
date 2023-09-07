@@ -2,19 +2,12 @@
 
 module V1
   module PurchaseOrders
-    class CreateForm < BaseForm
+    class CreateForm < JSONAPIForm::Base
       TYPE = 'purchase_order'
 
       RELATIONSHIPS = {
-        'purchase_orders_products' => OrdersProductForm
+        purchase_orders_products: { class_name: OrdersProductForm.name, is_collection: true }
       }.freeze
-
-      attr_accessor(*RELATIONSHIPS.keys)
-
-      def initialize(args)
-        @without_attributes = true
-        super(args)
-      end
 
       validates_presence_of :purchase_orders_products
     end

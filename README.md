@@ -3,8 +3,8 @@
 ## Start
 
 1. `docker-compose up`
-1. Create ENV files: `.env.development` and/or `.env.test`
-1. Documentation `docs/swagger.yaml`.
+2. docker exec store-api-store-api-1 rails db:migrate
+3. Documentation `docs/swagger.yaml`.
 
 ## ENV
 

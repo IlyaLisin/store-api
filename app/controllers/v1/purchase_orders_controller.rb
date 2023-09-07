@@ -2,8 +2,9 @@
 
 module V1
   class PurchaseOrdersController < ApplicationController
+    # POST   /v1/purchase_orders
     def create
-      order = V1::PurchaseOrders::CreateQuery.call(nil, request)
+      order = V1::PurchaseOrders::CreatePurchaseOrder.call!(params: params.permit!.to_h).order
 
       render json: PurchaseOrderSerializer.new(order)
     end

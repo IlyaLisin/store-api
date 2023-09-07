@@ -5,7 +5,12 @@ module V1
     class CreateUser
       include Interactor
 
-      delegate :form, to: :context
+      delegate :params, :form, to: :context
+
+      before do
+        context.form = CreateForm.new(params)
+        form.validate!
+      end
 
       def call
         context.user = User.new(user_params)

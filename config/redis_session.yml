@@ -1,7 +1,7 @@
 development: &default
   host: <%= ENV.fetch("SESSION_REDIS_HOST") %>
   port: <%= ENV.fetch("SESSION_REDIS_PORT") %>
-  db: <%= ENV.fetch("SESSION_REDIS_DB") { 2 } %>
+  db: <%= ENV.fetch("SESSION_REDIS_DB") { 1 } %>
   expire_after: <%= ENV.fetch("SESSION_REDIS_EXPIRE") { 36400 } %>
   prefix: <%= "\"#{ENV.fetch("SESSION_PREFIX") { 'session:' }}\""  %>
 staging:
@@ -11,3 +11,4 @@ production:
 test:
   <<: *default
   db: <%= ENV.fetch("SESSION_REDIS_DB") { 11 } %>
+  prefix: <%= "\"#{ENV.fetch("SESSION_PREFIX") { 'session:test:' }}\""  %>

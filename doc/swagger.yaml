@@ -115,6 +115,10 @@ paths:
       tags:
         - products
       parameters:
+        - $ref: '#/components/parameters/FilterByName'
+        - $ref: '#/components/parameters/FilterByPriceFrom'
+        - $ref: '#/components/parameters/FilterByPriceTo'
+        - $ref: '#/components/parameters/SortProducts'
         - $ref: '#/components/parameters/PageNumber'
         - $ref: '#/components/parameters/PageSize'
       responses:
@@ -551,3 +555,38 @@ components:
           type: string
           enum:
             - purchase_orders_products
+    FilterByName:
+      name: filter[name]
+      in: query
+      required: false
+      description: Filter by name
+      schema:
+        type: string
+    FilterByPriceFrom:
+      name: filter[price_from]
+      in: query
+      required: false
+      description: Filter by price from
+      schema:
+        type: string
+    FilterByPriceTo:
+      name: filter[price_to]
+      in: query
+      required: false
+      description: Filter by price to
+      schema:
+        type: string
+    SortProducts:
+      name: sort
+      in: query
+      description: sort
+      schema:
+        type: string
+        enum:
+          - created_at
+          - -created_at
+          - name
+          - -name
+          - price
+          - -price
+

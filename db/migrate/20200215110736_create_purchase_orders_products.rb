@@ -2,15 +2,15 @@
 
 class CreatePurchaseOrdersProducts < ActiveRecord::Migration[6.0]
   def change
-    create_table :purchase_orders_products, id: :uuid, comment: 'Связь товаров и заказов' do |t|
-      t.integer :amount, null: false, default: 1, comment: 'Количество единиц товара'
+    create_table :purchase_orders_products, id: :uuid, comment: 'Orders and products many to many' do |t|
+      t.integer :amount, null: false, default: 1, comment: 'Products ammount'
       t.references :purchase_order,
                    type: :uuid,
                    null: false,
                    foreign_key: true,
                    index: false,
-                   comment: 'Ссылка на заказ'
-      t.references :product, type: :uuid, null: false, foreign_key: true, comment: 'Ссылка на товар'
+                   comment: 'Reference to order'
+      t.references :product, type: :uuid, null: false, foreign_key: true, comment: 'Reference to product'
 
       t.timestamps
     end

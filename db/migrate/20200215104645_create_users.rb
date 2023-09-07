@@ -2,7 +2,7 @@
 
 class CreateUsers < ActiveRecord::Migration[6.0]
   def change
-    create_table :users, id: :uuid, comment: 'Пользователи' do |t|
+    create_table :users, id: :uuid, comment: 'Users' do |t|
       t.string :name
       t.string :phone, null: true, index: { unique: true }
       t.string :email, null: false, index: { unique: true }

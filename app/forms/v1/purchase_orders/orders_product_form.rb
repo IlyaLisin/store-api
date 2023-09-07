@@ -2,19 +2,13 @@
 
 module V1
   module PurchaseOrders
-    class OrdersProductForm < BaseForm
-      def initialize(args)
-        super(args)
-      end
-
+    class OrdersProductForm < JSONAPIForm::Base
       TYPE = 'purchase_orders_product'
 
       ATTRIBUTES = %w[
         product_id
         amount
       ].freeze
-
-      attr_accessor(*ATTRIBUTES)
 
       validates_presence_of :product_id, :amount
 
